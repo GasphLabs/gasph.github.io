@@ -1,9 +1,8 @@
-<!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src https://api.counterapi.dev;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline' https://gc.zgo.at; img-src data: https://counterkeed.goatcounter.com; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src https://counterkeed.goatcounter.com;">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23000000'/%3E%3Ctext%20x='32'%20y='45'%20font-family='ui-monospace,Menlo,Consolas,monospace'%20font-size='38'%20font-weight='600'%20fill='%23ffffff'%20text-anchor='middle'%3Eg%3C/text%3E%3C/svg%3E">
 <title>gasph</title>
 <style>
@@ -24,7 +23,7 @@
     justify-content:center;
     overflow:hidden;
   }
-
+ 
   .sr-only{
     position:absolute;
     width:1px; height:1px;
@@ -34,14 +33,14 @@
     white-space:nowrap;
     border:0;
   }
-
+ 
   .card{
     position:relative;
     z-index:1;
     text-align:center;
     padding: 2rem;
   }
-
+ 
   .name{
     font-size: clamp(2.4rem, 8vw, 4.2rem);
     letter-spacing: 0.02em;
@@ -50,22 +49,12 @@
     position:relative;
     display:inline-block;
   }
-
+ 
   .name .ch{
     display:inline-block;
     width: 1ch;
   }
-
-  .name .ch.spinning{
-    animation: reel 0.11s linear infinite;
-  }
-
-  @keyframes reel{
-    0%{ transform: translateY(0); }
-    50%{ transform: translateY(-4px); }
-    100%{ transform: translateY(0); }
-  }
-
+ 
   .name::after{
     content:"";
     position:absolute;
@@ -76,7 +65,7 @@
     height: 2px;
     background: var(--accent);
   }
-
+ 
   .fields{
     margin-top: 2.6rem;
     display:flex;
@@ -87,27 +76,27 @@
     color: var(--text-dim);
     text-transform: lowercase;
   }
-
+ 
   .fields span{
     transition: color 0.2s ease;
   }
-
+ 
   .fields span:hover{
     color: var(--text);
   }
-
+ 
   .contact{
     margin-top: 3rem;
     font-size: 0.78rem;
     color: var(--text-dim);
     letter-spacing: 0.04em;
   }
-
+ 
   .contact b{
     color: var(--accent);
     font-weight: 500;
   }
-
+ 
   @media (prefers-reduced-motion: no-preference){
     .card{ animation: rise 0.6s ease both; }
   }
@@ -129,78 +118,74 @@
       <span>networks</span>
       <span>cybersecurity</span>
     </div>
-    <div class="contact">discord — <b>u7wq</b></div>
+    <div class="contact">discord — <b>admin023820</b></div>
   </main>
-
+ 
 <script>
 (function(){
   "use strict";
-
+ 
   var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   if (reduceMotion) return; // keep the name static, no scramble animation
-
+ 
   var ORIGINAL = ["g", "a", "s", "p", "h"];
   var UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   var LOWER = "abcdefghijklmnopqrstuvwxyz";
   var DIGITS = "0123456789";
   var SYMBOLS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
   var CHARSET = UPPER + LOWER + DIGITS + SYMBOLS;
-
+ 
   function randChar(){
     return CHARSET.charAt(Math.floor(Math.random() * CHARSET.length));
   }
-
+ 
   var container = document.getElementById("brandName");
   var chars = container ? Array.prototype.slice.call(container.querySelectorAll(".ch")) : [];
-
+ 
   var TOTAL_MS = 2000;     // how long the reels spin before settling
   var STEP_MS = 55;        // how often the values roll over — all letters together
   var INTERVAL_MS = 20000; // run every 20 seconds
-
+ 
   var running = false;
   var spinTimer = null;
-
+ 
   function stopMidGlitch(){
     if (spinTimer){ clearInterval(spinTimer); spinTimer = null; }
     if (running){
       chars.forEach(function(el, idx){
         el.textContent = ORIGINAL[idx];
-        el.classList.remove("spinning");
       });
       running = false;
     }
   }
-
+ 
   function runGlitch(){
     if (running || chars.length === 0) return;
     running = true;
-
-    chars.forEach(function(el){ el.classList.add("spinning"); });
-
+ 
     var startTime = Date.now();
     spinTimer = setInterval(function(){
       var elapsed = Date.now() - startTime;
-
+ 
       if (elapsed >= TOTAL_MS){
         clearInterval(spinTimer);
         spinTimer = null;
         chars.forEach(function(el, idx){
           el.textContent = ORIGINAL[idx];
-          el.classList.remove("spinning");
         });
         running = false;
         return;
       }
-
+ 
       chars.forEach(function(el){
         el.textContent = randChar();
       });
     }, STEP_MS);
   }
-
+ 
   var loopTimer = null;
   var initialTimer = null;
-
+ 
   function startLoop(){
     if (!loopTimer) loopTimer = setInterval(runGlitch, INTERVAL_MS);
   }
@@ -208,7 +193,7 @@
     if (loopTimer){ clearInterval(loopTimer); loopTimer = null; }
     if (initialTimer){ clearTimeout(initialTimer); initialTimer = null; }
   }
-
+ 
   document.addEventListener("visibilitychange", function(){
     if (document.hidden){
       stopLoop();
@@ -217,75 +202,13 @@
       startLoop();
     }
   });
-
+ 
   startLoop();
   initialTimer = setTimeout(runGlitch, 2000);
 })();
 </script>
-
-<script>
-(function(){
-  "use strict";
-
-  // Private view counter — never rendered on the page. Reveal it
-  // yourself by typing "count" anywhere on the page. Visitors have
-  // no visible UI, no link, and no indication this exists.
-  var COUNTER_URL = "https://api.counterapi.dev/v1/gasph-site/views/up";
-  var count = null;
-  var fetchFailed = false;
-
-  fetch(COUNTER_URL, { method: "GET" })
-    .then(function(res){ return res.json(); })
-    .then(function(data){
-      var val = (data && data.data && (data.data.up_count || data.data.value || data.data.count));
-      count = (typeof val === "number") ? val : null;
-    })
-    .catch(function(){ fetchFailed = true; });
-
-  var overlay = null;
-  function ensureOverlay(){
-    if (overlay) return overlay;
-    overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.bottom = "14px";
-    overlay.style.right = "16px";
-    overlay.style.padding = "6px 10px";
-    overlay.style.fontFamily = "ui-monospace, monospace";
-    overlay.style.fontSize = "11px";
-    overlay.style.letterSpacing = "0.04em";
-    overlay.style.color = "#e7e7ea";
-    overlay.style.background = "rgba(20,20,22,0.9)";
-    overlay.style.border = "1px solid #2a2a2e";
-    overlay.style.borderRadius = "6px";
-    overlay.style.zIndex = "9999";
-    overlay.style.display = "none";
-    overlay.setAttribute("aria-hidden", "true");
-    document.body.appendChild(overlay);
-    return overlay;
-  }
-
-  function toggleOverlay(){
-    var el = ensureOverlay();
-    if (el.style.display === "none"){
-      el.textContent = fetchFailed ? "views: unavailable" : ("views: " + (count === null ? "…" : count));
-      el.style.display = "block";
-    } else {
-      el.style.display = "none";
-    }
-  }
-
-  var buffer = "";
-  var TRIGGER = "count";
-  document.addEventListener("keydown", function(e){
-    if (e.key && e.key.length === 1){
-      buffer = (buffer + e.key.toLowerCase()).slice(-TRIGGER.length);
-      if (buffer === TRIGGER){
-        toggleOverlay();
-        buffer = "";
-      }
-    }
-  });
-})();
-</script>
+ 
+<script data-goatcounter="https://counterkeed.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
+ 
